@@ -28,7 +28,7 @@ jobs:
             gdown.download(url, output, quiet=False)
 
         if __name__=="__main__":
-          download_drive('1RSsR-IPNI_FO_wT82pJO5sfaZSoEl38e')    
+          download_drive('https://drive.google.com/uc?id=1RSsR-IPNI_FO_wT82pJO5sfaZSoEl38e')    
       shell: python
     - name: show files
       run: |
@@ -39,8 +39,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
       with:
-        tag_name: new4${{ github.run_number }}
-        release_name: new4${{ github.run_number }}
+        tag_name: new5${{ github.run_number }}
+        release_name: new5${{ github.run_number }}
         draft: false
         prerelease: false
     - name: upload asset to release
