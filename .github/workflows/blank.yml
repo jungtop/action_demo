@@ -1,0 +1,49 @@
+name: create release
+'on':
+  push:
+    branches:
+      - main
+jobs:
+  release-project:
+    name: release source files
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install gdown 
+            
+    - name: Create zip file for plain and pages
+      run: |
+        import gdown
+        
+        output="./temp/temp.zip"
+        
+        def download_drive(url):
+            gdown.download(url.format(id=id), output, quiet=False)
+      shell: python
+      
+    - name: create github release
+      id: create-new-release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+      with:
+        tag_name: new${{ github.run_number }}
+        release_name: new${{ github.run_number }}
+        draft: false
+        prerelease: false
+    - name: upload asset to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create-new-release.outputs.upload_url}}
+        asset_path: ./temp/temp.zip
+        asset_name: tengyur.zip
+        asset_content_type: text/zip
